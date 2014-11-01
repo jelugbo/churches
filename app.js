@@ -36,7 +36,10 @@ app.use(cors());
                 width: 80,
                 height: 80
             }
-        }
+        }, accessControl: {
+        allowOrigin: '*',
+        allowMethods: 'OPTIONS, HEAD, GET, POST, PUT, DELETE'
+    }
     });
 
 
@@ -84,6 +87,7 @@ app.get('/', routes.index);
 app.get('/users', users.index);
 app.get('/users/:id',users.show);
 app.get('/userByEmail/:emailAddress',users.userByEmail);
+app.get('/userProfile/:emailAddress',users.userProfile);
 
 app.post('/user', users.create);
 app.post ('/auth' , users.auth);
@@ -91,6 +95,8 @@ app.post ('/auth' , users.auth);
 app.del('/users',users.delete);
 
 app.put('/users', users.update);
+app.put('/updateProfile1', users.updateProfile1);
+app.put('/updateProfile2', users.updateProfile2);
 app.put('/verify',users.verify);
 app.put('/ResendVerificationCode',users.ResendVerificationCode);
 app.put('/ResetPassCode',users.ResetPassCode);

@@ -132,7 +132,7 @@ exports.delete = function(req, res) {
 
 exports.update = function(req, res) {
   
-  var id = req.body.id;
+  var id = req.body.event_id;
 
   var event_event_name = req.body.event_event_name; // First name of event.
   var event_venue = req.body.event_venue; // Last name of the event

@@ -141,7 +141,9 @@ function(err, doc) { // Using RegEx - search is case insensitive
       var myState = true ;
       if (myState === doc.vstate)
       {
-      res.json(200, doc.id);
+      res.json(200,  {TOKEN: doc.id 
+                        ,name: doc.first_name
+                        ,id: doc.email_address });
       }
       else
         {
@@ -217,6 +219,38 @@ exports.userByEmail = function(req, res) {
   });
 }
 
+exports.userProfile = function(req, res) {
+  
+  var user_email_address = req.params.emailAddress; // The id of the user the user you want to look up.
+  user.findOne({email_address: user_email_address}, function(err, doc) {
+    if(!err && doc) {
+
+      var newuser = new user();
+      
+      
+      newuser.first_name = doc.first_name;
+      newuser.last_name = doc.last_name;
+      newuser.email_address = doc.email_address;
+      newuser.phone_number = doc.phone_number;
+      newuser.address = doc.address;
+      newuser.marrital_Status = doc.marrital_Status;
+      newuser.anniversary_date = doc.anniversary_date;
+      newuser.imageurl = doc.imageurl;
+      newuser.birthdate = doc.birthdate;
+      newuser.publishBirthday = doc.publishBirthday;
+      newuser.account_type = doc.account_type;
+
+
+      res.json(200, newuser);
+
+    } else if(err) {
+      res.json(500, { message: "Error loading user." + err});
+    } else {
+      res.json(404, { message: "user not found."});
+    }
+  });
+}
+
 
 exports.delete = function(req, res) {
       
@@ -265,6 +299,86 @@ err});
       }
     });
 }
+
+
+exports.updateProfile1 = function(req, res) {
+  
+  // console.log(req.body)
+   
+ 
+   var user_email_address=req.body.user_email;
+  var user_first_name = req.body.user_firstname; // First name of user.
+  var user_last_name = req.body.user_lastname; // Last name of the user
+
+      
+  user.findOne({email_address: user_email_address}, function(err, doc) {
+      if(!err && doc) {
+        doc.first_name = user_first_name; 
+        doc.last_name = user_last_name;
+    // doc.user_email_address = user_email_address;
+    //     doc.user_password = user_password;
+        doc.save(function(err) {
+          if(!err) {
+            res.json(200, {message: "Update was successful"});
+          } else {
+            res.json(500, {message: "Could not update user. " + err});
+          }
+        });
+      } else if(!err) {
+        res.json(404, { message: "Could not find user."});
+      } else {
+        res.json(500, { message: "Could not update user. " + err});
+      }
+    });
+}
+
+
+
+exports.updateProfile2 = function(req, res) {
+  
+  // console.log(req.body)
+   
+ 
+   var user_email_address=req.body.user_email;
+  
+  var user_gender = req.body.user_gender;
+  var user_dateOfBirth = req.body.user_dateOfBirth; // First name of user.
+  var user_publishBirthday = req.body.user_publishBirthday; // Last name of the user
+  var user_marritalStatus = req.body.user_marritalStatus;
+  var user_anniversaryDate = req.body.user_anniversaryDate;
+  var user_address = req.body.user_address;
+
+      
+  user.findOne({email_address: user_email_address}, function(err, doc) {
+      if(!err && doc) {
+          doc.gender = user_gender;
+          doc.birthdate = user_dateOfBirth; // First name of user.
+          doc.publishBirthday = user_publishBirthday; // Last name of the user
+          doc.marrital_Status = user_marritalStatus;
+          doc.anniversary_date = user_anniversaryDate;
+          doc.address = user_address;
+    // doc.user_email_address = user_email_address;
+    //     doc.user_password = user_password;
+        doc.save(function(err) {
+          if(!err) {
+            res.json(200, {message: "Update was successful"});
+          } else {
+            res.json(500, {message: "Could not update user. " + err});
+          }
+        });
+      } else if(!err) {
+        res.json(404, { message: "Could not find user."});
+      } else {
+        res.json(500, { message: "Could not update user. " + err});
+      }
+    });
+}
+
+
+
+
+
+
 
 
 exports.verify = function(req, res) {
